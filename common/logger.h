@@ -71,7 +71,6 @@ public:
     static Logger &getInstance();
     static void setMinPrio(Priority prio);
     static Priority getMinPrio();
-    static void linkToDbWithOutput(const std::string &dbName, const PriorityChangeNotify& prioNotify, const std::string& defPrio, const OutputChangeNotify& outputNotify, const std::string& defOutput);
     static void linkToDb(const std::string &dbName, const PriorityChangeNotify& notify, const std::string& defPrio);
     // Must be called after all linkToDb to start select from DB
     static void linkToDbNative(const std::string &dbName);
@@ -128,6 +127,7 @@ private:
     Logger(const Logger&);
     Logger &operator=(const Logger&);
 
+    static void linkToDbWithOutput(const std::string &dbName, const PriorityChangeNotify& prioNotify, const std::string& defPrio, const OutputChangeNotify& outputNotify, const std::string& defOutput);
     static void swssPrioNotify(const std::string &component, const std::string &prioStr);
     static void swssOutputNotify(const std::string &component, const std::string &outputStr);
     [[ noreturn ]] void settingThread();

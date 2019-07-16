@@ -24,7 +24,7 @@ public:
     void removeSelectable(Selectable *selectable);
 
     /* Add multiple objects for select */
-    void addSelectables(std::vector<Selectable *> selectables);
+    void addSelectables(const std::vector<Selectable *>& selectables);
 
     enum {
         OBJECT = 0,

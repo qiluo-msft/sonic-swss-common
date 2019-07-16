@@ -79,7 +79,7 @@ void Select::removeSelectable(Selectable *selectable)
     }
 }
 
-void Select::addSelectables(vector<Selectable *> selectables)
+void Select::addSelectables(const vector<Selectable *>& selectables)
 {
     for(auto it : selectables)
     {

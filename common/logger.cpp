@@ -12,7 +12,7 @@
 #include "select.h"
 #include "dbconnector.h"
 #include "redisclient.h"
-#include "consumerstatetable.h"
+#include "subscriberstatetable.h"
 #include "producerstatetable.h"
 
 namespace swss {
@@ -124,7 +124,7 @@ void Logger::linkToDbWithOutput(const std::string &dbName, const PriorityChangeN
 
     if (doUpdate)
     {
-        ProducerStateTable table(&db, dbName);
+        Table table(&db, dbName);
         FieldValueTuple fvLevel(DAEMON_LOGLEVEL, prio);
         FieldValueTuple fvOutput(DAEMON_LOGOUTPUT, output);
         std::vector<FieldValueTuple>fieldValues = { fvLevel, fvOutput };
@@ -170,11 +170,11 @@ Logger::Priority Logger::getMinPrio()
 {
     Select select;
     DBConnector db(LOGLEVEL_DB, DBConnector::DEFAULT_UNIXSOCKET, 0);
-    std::vector<std::shared_ptr<ConsumerStateTable>> selectables(m_settingChangeObservers.size());
+    std::vector<std::shared_ptr<SubscriberStateTable>> selectables(m_settingChangeObservers.size());
 
     for (const auto& i : m_settingChangeObservers)
     {
-        std::shared_ptr<ConsumerStateTable> table = std::make_shared<ConsumerStateTable>(&db, i.first);
+        auto table = std::make_shared<SubscriberStateTable>(&db, i.first);
         selectables.push_back(table);
         select.addSelectable(table.get());
     }
@@ -192,7 +192,7 @@ Logger::Priority Logger::getMinPrio()
         }
 
         KeyOpFieldsValuesTuple koValues;
-        dynamic_cast<ConsumerStateTable *>(selectable)->pop(koValues);
+        dynamic_cast<SubscriberStateTable *>(selectable)->pop(koValues);
         std::string key = kfvKey(koValues), op = kfvOp(koValues);
 
         if ((op != SET_COMMAND) || (m_settingChangeObservers.find(key) == m_settingChangeObservers.end()))

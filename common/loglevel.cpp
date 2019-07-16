@@ -8,7 +8,7 @@
 #include "logger.h"
 #include "dbconnector.h"
 #include "redisclient.h"
-#include "producerstatetable.h"
+#include "table.h"
 
 using namespace swss;
 
@@ -38,7 +38,7 @@ using namespace swss;
 
 void setLoglevel(DBConnector& db, const std::string& component, const std::string& loglevel)
 {
-    ProducerStateTable table(&db, component);
+    Table table(&db, component);
     FieldValueTuple fv(DAEMON_LOGLEVEL, loglevel);
     std::vector<FieldValueTuple>fieldValues = { fv };
     table.set(component, fieldValues);
